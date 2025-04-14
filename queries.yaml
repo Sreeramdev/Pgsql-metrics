@@ -1,0 +1,34 @@
+pg_stat_activity:
+  query: |
+    SELECT
+      COUNT(*) as total_connections,
+      COUNT(*) FILTER (WHERE state = 'active') as active_connections
+    FROM pg_stat_activity
+    WHERE datname = current_database()
+  metrics:
+    - total_connections: 
+        usage: "GAUGE" 
+        description: "Total connections"
+    - active_connections: 
+        usage: "GAUGE" 
+        description: "Active connections"
+
+pg_stat_statements_compat:
+  query: |
+    SELECT
+      query,
+      calls as total_calls,
+      total_exec_time as total_time_ms
+    FROM public.pg_stat_statements
+    ORDER BY total_exec_time DESC
+    LIMIT 20
+  metrics:
+    - query:
+        usage: "LABEL"
+        description: "Query text"
+    - total_calls:
+        usage: "COUNTER"
+        description: "Total calls"
+    - total_time_ms:
+        usage: "COUNTER"
+        description: "Total time ms"
