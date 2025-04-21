@@ -120,10 +120,10 @@ services:
     image: grafana/promtail:latest
     container_name: promtail
     volumes:
-      - ./promtail-config.yaml:/etc/promtail/config.yml
+      - ./promtail-config.yaml:/etc/promtail/promtail.yaml
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - /var/log:/var/log:ro
-    command: -config.file=/etc/promtail/config.yml
+    command: -config.file=/etc/promtail/promtail.yaml
     depends_on:
       - loki
     networks:
