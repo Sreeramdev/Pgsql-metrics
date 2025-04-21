@@ -63,7 +63,7 @@ services:
     volumes:
       - ./queries.yaml:/config/queries.yaml
     ports:
-      - "9187:9187"
+      - "9188:9187"
     depends_on:
       - postgres
     networks:
