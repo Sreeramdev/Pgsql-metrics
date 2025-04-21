@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  # PostgreSQL Database
+  # PostgreSQL Database (existing)
   postgres:
     image: postgres:15-alpine
     container_name: postgres
@@ -9,10 +9,9 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin123
       POSTGRES_DB: sampledb
-      LC_ALL: en_US.UTF-8  # Add these
+      LC_ALL: en_US.UTF-8
       LANG: en_US.UTF-8 
       LANGUAGE: en_US.UTF-8
-
     ports:
       - "5432:5432"
     volumes:
@@ -24,16 +23,43 @@ services:
     restart: unless-stopped
     networks:
       - monitoring
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d sampledb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
-  # Postgres Exporter
+  # PG Back Web Service
+  pgbackweb:
+    image: eduardolat/pgbackweb:latest
+    container_name: pgbackweb
+    ports:
+      - "8085:8085"  # Web interface port
+    environment:
+      PBW_ENCRYPTION_KEY: "your_strong_encryption_key_here"  # Change this!
+      PBW_POSTGRES_CONN_STRING: "postgresql://admin:admin123@postgres:5432/pgbackweb?sslmode=disable"
+      TZ: "UTC"  # Set your timezone
+      # Optional S3 configuration (if you want to manage S3 through the UI)
+      PBW_S3_ACCESS_KEY_ID: "AKIAXKPUZ46JS5PPIBTV"
+      PBW_S3_SECRET_ACCESS_KEY: "34bThE5wiJzceVLUu4FfzEhIDTMpbn51NTDkjFRT"
+      PBW_S3_ENDPOINT: "s3.amazonaws.com"
+      PBW_S3_FORCE_PATH_STYLE: "true"
+      PBW_S3_REGION: "us-east-1"
+      PBW_S3_BUCKET: "postgres-backups-b3d1517c"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - monitoring
+
+  # Postgres Exporter (existing)
   postgres-exporter:
     image: prometheuscommunity/postgres-exporter
     container_name: postgres-exporter
     environment:
       DATA_SOURCE_NAME: "postgresql://admin:admin123@postgres:5432/sampledb?sslmode=disable"
-      PG_EXPORTER_DISABLE_DEFAULT_METRICS: "true"  # Add this line
+      PG_EXPORTER_DISABLE_DEFAULT_METRICS: "true"
       PG_EXPORTER_EXTEND_QUERY_PATH: /config/queries.yaml
-
     volumes:
       - ./queries.yaml:/config/queries.yaml
     ports:
@@ -43,7 +69,7 @@ services:
     networks:
       - monitoring
 
-  # Prometheus
+  # Prometheus (existing)
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -58,7 +84,7 @@ services:
     networks:
       - monitoring
 
-  # Grafana
+  # Grafana (existing)
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
@@ -77,7 +103,7 @@ services:
     networks:
       - monitoring
 
-  # Loki
+  # Loki (existing)
   loki:
     image: grafana/loki:latest
     container_name: loki
@@ -89,7 +115,7 @@ services:
     networks:
       - monitoring
 
-  # Promtail
+  # Promtail (existing)
   promtail:
     image: grafana/promtail:latest
     container_name: promtail
@@ -103,7 +129,6 @@ services:
     networks:
       - monitoring
 
-  
 volumes:
   postgres_data:
   grafana_data:

@@ -1,0 +1,8 @@
+Completed 1.4 KiB/1.4 KiB (23.0 KiB/s) with 1 file(s) remainingupload: ./sampledb_backup_20250414_101801.sql.gz to s3://postres-s3-backups/postgres-backups/sampledb_backup_20250414_101801.sql.gz
+Backup completed and uploaded to S3: s3://postres-s3-backups/postgres-backups/sampledb_backup_20250414_101801.sql.gz
+Completed 1.4 KiB/1.4 KiB (21.1 KiB/s) with 1 file(s) remainingupload: ./sampledb_backup_20250414_102001.sql.gz to s3://postres-s3-backups/postgres-backups/sampledb_backup_20250414_102001.sql.gz
+Backup completed and uploaded to S3: s3://postres-s3-backups/postgres-backups/sampledb_backup_20250414_102001.sql.gz
+Completed 1.4 KiB/1.4 KiB (20.3 KiB/s) with 1 file(s) remainingupload: ./sampledb_backup_20250414_102201.sql.gz to s3://postres-s3-backups/postgres-backups/sampledb_backup_20250414_102201.sql.gz
+Backup completed and uploaded to S3: s3://postres-s3-backups/postgres-backups/sampledb_backup_20250414_102201.sql.gz
+Completed 1.4 KiB/1.4 KiB (25.2 KiB/s) with 1 file(s) remainingupload: ./sampledb_backup_20250414_102401.sql.gz to s3://postres-s3-backups/postgres-backups/sampledb_backup_20250414_102401.sql.gz
+Backup completed and uploaded to S3: s3://postres-s3-backups/postgres-backups/sampledb_backup_20250414_102401.sql.gz
